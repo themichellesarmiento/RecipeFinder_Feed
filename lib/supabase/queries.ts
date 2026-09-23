@@ -3,7 +3,7 @@ import { type QueryData } from '@supabase/supabase-js'
 
 const supabase = createClient()
 
-export const getAllRecipes = async () => {
+export const getAllRecipes = async (supabase: ReturnType<typeof createClient>) => {
   return await supabase
     .from("recipes")
     .select('id, title, slug, author("id","username"),category("name")')

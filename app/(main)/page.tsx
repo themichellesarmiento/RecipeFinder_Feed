@@ -1,8 +1,10 @@
 import RecipeHomeGrid from "@/components/Recipe/RecipeHomeGrid";
 import { getAllRecipes } from "@/lib/supabase/queries";
+import { createClient } from "@/lib/supabase/serverClient";
 
 const Home = async () => {
-  const { data: allRecipes } = await getAllRecipes()
+  const supabase = await createClient()
+  const { data: allRecipes } = await getAllRecipes(supabase)
 
   return (
     <div className='max-w-6xl px-4 py-8 md:py-14 mx-auto'>

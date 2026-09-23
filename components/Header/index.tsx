@@ -7,7 +7,7 @@ const Header = () => {
     <>
       <header className='flex justify-between p-4 bg-accent-one'>
         <Link href='/' className='font-extrabold text-xl md:text-2xl'>RecipeFinder</Link>
-        <Link href='/login' className='font-bold text-xl md:text-2xl'><User strokeWidth={1} /></Link>
+        <Link href='/auth/login' className='font-bold text-xl md:text-2xl'><User strokeWidth={1} /></Link>
       </header>
     </>
   )

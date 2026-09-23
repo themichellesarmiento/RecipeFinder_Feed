@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { QueryClientProvider } from "@/providers/queryProvider";
-import Header from "@/components/Header";
-import SearchBar from "@/components/SearchBar";
-import GlobalSearchBar from "@/components/SearchBar/globalSearchBar";
+
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -26,8 +24,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <QueryClientProvider>
-          <Header/>
-          <GlobalSearchBar/>
           <main className="flex-1">
             {children}
           </main>

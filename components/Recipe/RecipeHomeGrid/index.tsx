@@ -3,12 +3,14 @@
 import { useQuery } from "@tanstack/react-query"
 import { AllRecipesType, getAllRecipes } from "@/lib/supabase/queries";
 import RecipeCard from "../RecipeCard";
+import { createClient } from "@/lib/supabase/browserClient";
 
 const RecipeHomeGrid = ({ recipes }: { recipes: AllRecipesType }) => {
+  const supabase = createClient()
   const { data: recipesData , isError ,error } = useQuery({
     queryKey: ['home-recipes'],
     queryFn: async () => {
-      const { data, error } = await getAllRecipes()
+      const { data, error } = await getAllRecipes(supabase)
       if (error) throw new Error(error.message)
       return data
     },
