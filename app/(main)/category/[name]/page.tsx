@@ -27,7 +27,7 @@ const RecipesByCategory = async ({ params }: { params: Promise<{ name: string }>
       <h1 className='text-2xl md:text-3xl text-center'>
         {name} cuisines
       </h1>
-      <div className='mt-8 grid grid-cols-2 gap-4 md:grid-cols-3'>
+      <div className='mt-8 grid grid-cols-1 gap-4 md:grid-cols-3'>
         {recipes.map((p, index) => (
           <RecipeCard recipe={p} key={index} />
         ))}

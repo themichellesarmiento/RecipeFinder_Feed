@@ -26,31 +26,31 @@ const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
   return (
     <div className='mx-auto max-w-3xl px-4 py-10 md:py-16'>
       <Link
-        href='/' className='text-sm text-text-primary/60 transition-colors hover:text-text-primary'>
+        href='/' className='text-base text-text-primary/60 transition-colors hover:text-text-primary'>
         ← Back to recipes
       </Link>
 
       {recipe && (
         <>
           <div className='relative mt-4 aspect-video overflow-hidden rounded-2xl'>
-            <Link href={`/category/${encodeURIComponent(recipe.category.name)}`} className='absolute left-3 top-3 rounded-full px-3 py-1 text-sm font-medium text-accent-three/90'>{recipe.category.name}</Link>
+            <Link href={`/category/${encodeURIComponent(recipe.category.name)}`} className='absolute left-3 top-3 rounded-full px-3 py-1 text-base md:text-lg font-medium text-accent-three/90'>{recipe.category.name}</Link>
           </div>
-          <h1 className='mt-6 text-3xl md:text-4xl'>{recipe.title}</h1>
+          <h1 className='mt-6 text-2xl md:text-3xl'>{recipe.title}</h1>
           <div className='mt-4 flex items-center gap-2'>
             <span className='flex h-8 w-8 items-center justify-center rounded-full bg-text-primary text-sm font-medium text-background'>
               {recipe.author.username.charAt(0).toUpperCase()}
             </span>
-            <span className='text-sm text-text-primary/70'> by {recipe.author.username}</span>
+            <span className='text-base text-text-primary/70'> by {recipe.author.username}</span>
           </div>
-          <div className='mt-8 flex flex-col gap-4'>
-            <h2 className='mb-3 text-lg font-medium'>Ingredients</h2>
-            <ul className='flex list-inside list-disc flex-col gap-2 marker:text-accent-three'>
+          <div className='mt-6 flex flex-col gap-4'>
+            <h2 className='text-xl font-medium'>Ingredients</h2>
+            <ul className='flex list-inside list-disc flex-col gap-2 marker:text-accent-three text-base font-light'>
               {ingredients.map((item, i) => (
                 <li key={i} className='text-text-primary/85'>{item}</li>
               ))}
             </ul>
-            <h2 className='mb-3 mt-6 text-lg font-medium'>Instructions</h2>
-            <ol className='flex list-inside list-decimal flex-col gap-3 marker:font-bold marker:text-accent-two'>
+            <h2 className='mb-3 mt-6 text-xl font-medium'>Instructions</h2>
+            <ol className='flex list-inside list-decimal flex-col gap-3 marker:font-bold marker:text-accent-two text-base md:text-lg'>
               {instructions.map((step, i) => (
                 <li key={i} className='text-text-primary/85'>{step}</li>
               ))}
