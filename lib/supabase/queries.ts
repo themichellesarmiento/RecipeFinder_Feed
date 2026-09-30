@@ -1,8 +1,6 @@
 import { createClient } from "./browserClient"
 import { type QueryData } from '@supabase/supabase-js'
 
-const supabase = createClient()
-
 export const getAllRecipes = async (supabase: ReturnType<typeof createClient>) => {
   return await supabase
     .from("recipes")
@@ -10,7 +8,7 @@ export const getAllRecipes = async (supabase: ReturnType<typeof createClient>) =
     .order('created_at', { ascending: false })
 }
 
-export const getSingleRecipe = async (slug: string) => {
+export const getSingleRecipe = async (slug: string, supabase: ReturnType<typeof createClient>) => {
   return await supabase
     .from("recipes")
     .select('id,title,ingredients,instructions,slug, author("id","username"),category("name" ,"id")')
@@ -18,21 +16,21 @@ export const getSingleRecipe = async (slug: string) => {
     .single()
 }
 
-export const searchRecipe = async (searchTerm: string) => {
+export const searchRecipe = async (searchTerm: string, supabase: ReturnType<typeof createClient>) => {
   return await supabase
     .from("recipes")
     .select('id, title, slug, author("id","username"),category("name")')
     .ilike('title', `%${searchTerm}%`)
 }
 
-export const getRecipesByCategory = async (categoryName: string) => {
+export const getRecipesByCategory = async (categoryName: string, supabase: ReturnType<typeof createClient>) => {
   return await supabase
     .from("recipes")
     .select('id, title, slug, author("id","username"),category:categories!inner("name")')
     .eq('categories.name', categoryName)
 }
 
-export const getCategories = async () => {
+export const getCategories = async (supabase: ReturnType<typeof createClient>) => {
   return await supabase
     .from('categories')
     .select('id, name')

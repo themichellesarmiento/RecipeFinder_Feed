@@ -4,10 +4,10 @@ import Link from 'next/link';
 import DeleteButton from '../deleteButton';
 
 const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
-  const { slug } = await params
-  const { data: recipe, error } = await getSingleRecipe(slug)
-
   const supabase = await createClient()
+  const { slug } = await params
+  const { data: recipe, error } = await getSingleRecipe(slug, supabase)
+
   const { data: { user } } = await supabase.auth.getUser()
   const isAuthor: boolean = user && recipe && user.id === recipe.author.id ? true : false
 

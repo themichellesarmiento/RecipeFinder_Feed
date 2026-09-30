@@ -2,6 +2,7 @@
 import { searchRecipe, SearchResultType } from "@/lib/supabase/queries"
 import { useQuery } from "@tanstack/react-query"
 import RecipeCard from "../Recipe/RecipeCard"
+import { createClient } from "@/lib/supabase/browserClient"
 
 interface SearchResultsProps {
   query: string,
@@ -9,10 +10,11 @@ interface SearchResultsProps {
 }
 
 const SearchResults = ({ query, initialData }: SearchResultsProps) => {
+  const supabase = createClient()
   const { data: results, isError, error } = useQuery({
     queryKey: ['search-results', query],
     queryFn: async () => {
-      const { data, error } = await searchRecipe(query)
+      const { data, error } = await searchRecipe(query, supabase)
       if (error) throw new Error(error.message)
       return data
     },

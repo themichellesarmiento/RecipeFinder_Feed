@@ -9,7 +9,7 @@ const EditRecipe = async ({ params }: { params: Promise<{ slug: string }> }) => 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/auth/login');
 
-  const { data: recipe, error } = await getSingleRecipe(slug)
+  const { data: recipe, error } = await getSingleRecipe(slug, supabase)
   if (!recipe) throw error
 
   if (recipe.author.id !== user.id) redirect('/');

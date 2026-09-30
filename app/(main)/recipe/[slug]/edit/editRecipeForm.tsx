@@ -2,6 +2,7 @@
 import { RecipeFormValues, recipeSchema } from '@/actions/schemas'
 import UpdateRecipe from '@/actions/update-recipe-action'
 import ErrorMessage from '@/components/UI/ErrorMessage'
+import { createClient } from '@/lib/supabase/browserClient'
 import { getCategories } from '@/lib/supabase/queries'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -15,12 +16,13 @@ interface EditRecipeProps {
 }
 
 const EditRecipeForm = ({ recipeId, defaultValues }: EditRecipeProps) => {
+  const supabase = createClient()
   const queryClient = useQueryClient()
   const router = useRouter()
   const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const { data, error } = await getCategories();
+      const { data, error } = await getCategories(supabase);
       if (error) throw new Error(error.message);
       return data;
     },

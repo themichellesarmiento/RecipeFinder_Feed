@@ -1,12 +1,12 @@
 import Header from "@/components/Header";
-import SearchBar from "@/components/SearchBar";
 import { ReactNode } from "react";
+import GlobalSearchBar from "@/components/GlobalSearchBar.tsx";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Header />
-      <SearchBar />
+      <GlobalSearchBar />
       {children}
     </>
   )

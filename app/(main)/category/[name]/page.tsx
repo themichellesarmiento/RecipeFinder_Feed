@@ -1,10 +1,12 @@
 import RecipeCard from "@/components/Recipe/RecipeCard"
 import { getRecipesByCategory } from "@/lib/supabase/queries"
+import { createClient } from "@/lib/supabase/serverClient"
 
 const RecipesByCategory = async ({ params }: { params: Promise<{ name: string }> }) => {
+  const supabase = await createClient()
   const { name } = await params
   const categoryName = decodeURIComponent(name)
-  const { data: recipes, error } = await getRecipesByCategory(categoryName)
+  const { data: recipes, error } = await getRecipesByCategory(categoryName, supabase)
 
   if (error) {
     return (
