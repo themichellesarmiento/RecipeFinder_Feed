@@ -1,11 +1,16 @@
 import { getSingleRecipe } from '@/lib/supabase/queries';
+import { createClient } from '@/lib/supabase/serverClient';
 import { parseRecipeContent } from '@/utils/parseContent';
 import Link from 'next/link';
+import DeleteButton from '../deleteButton';
 
 const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params
   const { data: recipe, error } = await getSingleRecipe(slug)
   const { instructions, ingredients } = parseRecipeContent(recipe!.content)
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const isAuthor: boolean = user && recipe && user.id === recipe.author.id ? true : false
 
   if (error) {
     return (
@@ -55,6 +60,12 @@ const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 <li key={i} className='text-text-primary/85'>{step}</li>
               ))}
             </ol>
+            {isAuthor &&
+            <div className='flex gap-2 mx-auto'>
+              <DeleteButton id={recipe.id} />
+              <Link href={`/recipe/${recipe.slug}/edit`} className='bg-accent-three rounded text-white p-4 w-fit'>Edit Recipe</Link>
+            </div>
+            }
           </div>
         </>
       )}
