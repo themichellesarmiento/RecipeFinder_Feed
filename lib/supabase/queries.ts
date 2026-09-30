@@ -1,5 +1,4 @@
-import { createClient } from "./browserClient"
-import { type QueryData } from '@supabase/supabase-js'
+import { type QueryData, createClient } from '@supabase/supabase-js'
 
 export const getAllRecipes = async (supabase: ReturnType<typeof createClient>) => {
   return await supabase

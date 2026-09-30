@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/serverClient"
 import { signUpSchema } from "./schemas"
 import { z } from 'zod'
+import { CreateAdminClient } from "@/lib/supabase/adminClient"
 
 export const SignUp = async (userdata: z.infer<typeof signUpSchema>) => {
   const supabase = await createClient()
@@ -11,8 +12,13 @@ export const SignUp = async (userdata: z.infer<typeof signUpSchema>) => {
   if (error) throw error
 
   if (user && user.email) {
-    const { error } = await supabase.from('users').insert({ id: user.id, email_address: user.email, username: userdata.username })
-    if (error) throw error
+    const { error: insertError } = await supabase.from('users').insert({ id: user.id, email_address: user.email, username: userdata.username })
+    if (insertError) {
+
+      const adminClient = CreateAdminClient()
+      await adminClient.auth.admin.deleteUser(user.id)
+      throw new Error(insertError.message)
+    }
   }
 
   return { success: true }
