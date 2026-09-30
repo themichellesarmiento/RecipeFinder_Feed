@@ -13,7 +13,7 @@ export const getAllRecipes = async (supabase: ReturnType<typeof createClient>) =
 export const getSingleRecipe = async (slug: string) => {
   return await supabase
     .from("recipes")
-    .select('id,title, content,slug, author("id","username"),category("name" ,"id")')
+    .select('id,title,ingredients,instructions,slug, author("id","username"),category("name" ,"id")')
     .eq("slug", slug)
     .single()
 }
@@ -34,9 +34,9 @@ export const getRecipesByCategory = async (categoryName: string) => {
 
 export const getCategories = async () => {
   return await supabase
-  .from('categories')
-  .select('id, name')
-  .order('name');
+    .from('categories')
+    .select('id, name')
+    .order('name');
 };
 
 export type AllRecipesType = QueryData<ReturnType<typeof getAllRecipes>>

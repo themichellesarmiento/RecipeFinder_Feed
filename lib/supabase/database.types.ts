@@ -36,29 +36,35 @@ export type Database = {
         Row: {
           author: string
           category: string
-          content: string | null
           created_at: string
           id: string
-          slug: string | null
-          title: string | null
+          ingredients: string
+          instructions: string
+          slug: string
+          title: string
+          updated_at: string
         }
         Insert: {
           author: string
           category: string
-          content?: string | null
           created_at?: string
           id?: string
-          slug?: string | null
-          title?: string | null
+          ingredients: string
+          instructions: string
+          slug: string
+          title: string
+          updated_at?: string
         }
         Update: {
           author?: string
           category?: string
-          content?: string | null
           created_at?: string
           id?: string
-          slug?: string | null
-          title?: string | null
+          ingredients?: string
+          instructions?: string
+          slug?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: [
           {
