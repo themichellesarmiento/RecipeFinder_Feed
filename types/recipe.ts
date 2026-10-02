@@ -1,11 +1,14 @@
 export interface RecipePropsType {
   id: string;
-  title: string | null;
-  slug: string | null;
+  title: string;
+  slug: string;
   author: {
     id: string;
     username: string;
   };
+  images: {
+    image_path: string
+  }[]
   category: {
     name: string;
   };

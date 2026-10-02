@@ -16,6 +16,7 @@ export const recipeSchema = z.object({
   ingredients: z.string().min(5, 'List at least one ingredient'),
   instructions: z.string().min(5, 'Add at least one instruction step'),
   category: z.uuid('Please choose a category'),
+  image:z.instanceof(FormData).optional()
 });
 
 export type RecipeFormValues = z.infer<typeof recipeSchema>;

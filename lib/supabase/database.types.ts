@@ -32,6 +32,87 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          author: string
+          content: string
+          created_at: string
+          id: string
+          parent_comment_id: string | null
+          recipe_id: string
+        }
+        Insert: {
+          author: string
+          content: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          recipe_id: string
+        }
+        Update: {
+          author?: string
+          content?: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          recipe_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipe_images: {
+        Row: {
+          created_at: string
+          id: string
+          image_path: string
+          position: number
+          recipe_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_path: string
+          position?: number
+          recipe_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_path?: string
+          position?: number
+          recipe_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_images_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recipes: {
         Row: {
           author: string
@@ -75,7 +156,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "Recipes_category_fkey"
+            foreignKeyName: "recipes_category_fkey"
             columns: ["category"]
             isOneToOne: false
             referencedRelation: "categories"

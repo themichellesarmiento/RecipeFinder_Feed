@@ -10,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import z from 'zod';
 
 const CreatePage = () => {
   const supabase = createClient()
@@ -24,8 +25,10 @@ const CreatePage = () => {
     },
   });
 
+  const postImageSchema = recipeSchema.omit({ image: true }).extend({ image: z.unknown().transform(value => { return value as FileList }).optional() })
+
   const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(recipeSchema)
+    resolver: zodResolver(postImageSchema)
   })
 
   const { mutate, error: serverSideError, isPending } = useMutation({
@@ -46,7 +49,18 @@ const CreatePage = () => {
         Share a recipe
       </h1>
 
-      <form onSubmit={handleSubmit(values => mutate(values))} className='mt-8 flex flex-col gap-5'>
+      <form onSubmit={handleSubmit(values => {
+        const imageForm = new FormData()
+        if (values.image) imageForm.append('image', values.image[0])
+        mutate({
+          title: values.title,
+          ingredients: values.ingredients,
+          instructions: values.instructions,
+          category: values.category,
+          image: imageForm
+        })
+
+      })} className='mt-8 flex flex-col gap-5'>
         {serverSideError && <ErrorMessage error={serverSideError.message} />}
         <div className='flex flex-col gap-1'>
           <label htmlFor='title' className='text-sm font-medium uppercase text-text-primary'> Title </label>
@@ -83,6 +97,13 @@ const CreatePage = () => {
             className='rounded-lg border border-text-primary/20 bg-background px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-one' />
           {errors.instructions && <ErrorMessage error={errors.instructions.message!} />}
         </div>
+
+        <div className='flex flex-col gap-1'>
+          <label htmlFor='image' className='text-sm font-medium uppercase'>Image (optional)</label>
+          <input type="file" {...register('image')} className='border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-one' />
+          {errors.image && <ErrorMessage error={errors.image.message!} />}
+        </div>
+
         <button
           type='submit' disabled={isPending} className='rounded bg-accent-one p-4 font-medium text-background disabled:opacity-60'>
           {isPending ? 'Publishing...' : 'Publish recipe'}

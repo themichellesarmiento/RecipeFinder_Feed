@@ -7,6 +7,8 @@ const RecipeCard = ({ recipe }: { recipe: RecipePropsType }) => {
       <Link href={`/recipe/${recipe.slug}`} className='absolute inset-0 z-0' />
       <div className="relative aspect-square overflow-hidden">
         <Link href={`/category/${encodeURIComponent(recipe.category.name)}`} className='relative z-10 inline-block rounded-full px-3 py-1 text-base md:text-lg font-medium text-accent-three/90'>{recipe.category.name}</Link>
+        {recipe.images[0] &&
+          <img src={recipe.images[0].image_path} alt={recipe.title} className="h-full w-full object-cover" />}
       </div>
       <div className="flex flex-col gap-3 p-4">
         <h3 className="text-xl">{recipe.title}</h3>

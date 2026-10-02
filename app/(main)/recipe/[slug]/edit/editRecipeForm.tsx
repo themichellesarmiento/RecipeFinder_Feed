@@ -9,13 +9,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import z from 'zod'
 
 interface EditRecipeProps {
   recipeId: string,
-  defaultValues: RecipeFormValues
+  defaultValues: RecipeFormValues,
+  currentImagePath: string | null
 }
 
-const EditRecipeForm = ({ recipeId, defaultValues }: EditRecipeProps) => {
+const EditRecipeForm = ({ recipeId, defaultValues, currentImagePath }: EditRecipeProps) => {
   const supabase = createClient()
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -28,8 +30,10 @@ const EditRecipeForm = ({ recipeId, defaultValues }: EditRecipeProps) => {
     },
   });
 
+  const postImageSchema = recipeSchema.omit({ image: true }).extend({ image: z.unknown().transform(value => { return value as FileList }).optional() })
+
   const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(recipeSchema),
+    resolver: zodResolver(postImageSchema),
     defaultValues
   })
 
@@ -49,7 +53,22 @@ const EditRecipeForm = ({ recipeId, defaultValues }: EditRecipeProps) => {
       <h1 className='font-display text-3xl text-text-primary md:text-4xl'>
         Edit a recipe
       </h1>
-      <form onSubmit={handleSubmit(values => mutate(values))} className='flex flex-col gap-5'>
+      <form onSubmit={handleSubmit(values => {
+        let imageForm: FormData | undefined = undefined
+        if (values.image && values.image.length > 0) {
+          imageForm = new FormData()
+          imageForm.append('image', values.image[0])
+        }
+        mutate({
+          title: values.title,
+          ingredients: values.ingredients,
+          instructions: values.instructions,
+          category: values.category,
+          image: imageForm
+        }
+        )
+      })}
+        className='flex flex-col gap-5'>
         {serverSideError && <ErrorMessage error={serverSideError.message} />}
         <div className='flex flex-col gap-1'>
           <label htmlFor='title' className='text-sm font-medium uppercase text-text-primary'>Title</label>
@@ -89,6 +108,13 @@ const EditRecipeForm = ({ recipeId, defaultValues }: EditRecipeProps) => {
           <textarea {...register('instructions')} id='instructions' rows={8} placeholder={`1. Preheat oven...\n2. Mix...\n...`}
             className='rounded-lg border border-text-primary/20 bg-background px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-one' />
           {errors.instructions && <ErrorMessage error={errors.instructions.message!} />}
+        </div>
+        {currentImagePath &&
+          <img src={currentImagePath} height={200} width={200} alt={defaultValues.title} />}
+        <div className='flex flex-col gap-1'>
+          <label htmlFor='image' className='text-sm font-medium uppercase'>Change Image:</label>
+          <input type="file" {...register('image')} className='border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-one' />
+          {errors.image && <ErrorMessage error={errors.image.message!} />}
         </div>
 
         <button type='submit' disabled={isPending} className='bg-accent-three rounded text-white p-4 w-fit mx-auto'>
