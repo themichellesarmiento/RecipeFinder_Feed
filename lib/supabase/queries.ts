@@ -40,6 +40,17 @@ export const getCategories = async (supabase: ReturnType<typeof createClient>) =
     .order('name');
 };
 
+export const getMoreFromAuthor = async (authorId: string, currentRecipeId: string, supabase: ReturnType<typeof createClient>) => {
+  return await supabase
+    .from('recipes')
+    .select(`id,title,slug,author:users(id, username),category:categories(id, name),images:recipe_images(image_path,position)`)
+    .eq('author', authorId)
+    .neq('id', currentRecipeId)
+    .eq('images.position', 1)
+    .order('created_at', { ascending: false })
+    .limit(3)
+}
+
 export type AllRecipesType = QueryData<ReturnType<typeof getAllRecipes>>
 export type SingleRecipeType = QueryData<ReturnType<typeof getSingleRecipe>>
 export type SearchResultType = QueryData<ReturnType<typeof searchRecipe>>

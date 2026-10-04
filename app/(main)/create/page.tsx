@@ -84,14 +84,14 @@ const CreateRecipePage = () => {
 
         <div className='flex flex-col gap-1'>
           <label htmlFor='ingredients' className='text-sm font-medium uppercase text-text-primary'>Ingredients</label>
-          <textarea {...register('ingredients')} id='ingredients' rows={6} placeholder={`- 1 cup flour\n- 2 eggs\n- ...`}
+          <textarea {...register('ingredients')} id='ingredients' rows={6} placeholder={`1 cup flour\n2 eggs\n- ...`}
             className='rounded-lg border border-text-primary/20 bg-background px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-one' />
           {errors.ingredients && <ErrorMessage error={errors.ingredients.message!} />}
         </div>
 
         <div className='flex flex-col gap-1'>
           <label htmlFor='instructions' className='text-sm font-medium uppercase text-text-primary'>Instructions</label>
-          <textarea {...register('instructions')} id='instructions' rows={8} placeholder={`1. Preheat oven...\n2. Mix...\n...`}
+          <textarea {...register('instructions')} id='instructions' rows={8} placeholder={`Preheat oven...\nMix...\n...`}
             className='rounded-lg border border-text-primary/20 bg-background px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-one' />
           {errors.instructions && <ErrorMessage error={errors.instructions.message!} />}
         </div>

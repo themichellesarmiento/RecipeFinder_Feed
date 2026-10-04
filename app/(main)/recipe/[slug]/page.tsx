@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/serverClient';
 import Link from 'next/link';
 import DeleteButton from '../deleteButton';
 import RecipeImageGrid from '@/components/UI/ImageGrid';
+import MoreFromAuthor from '@/components/Recipe/MoreFromAuthor';
 
 const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const supabase = await createClient()
@@ -39,7 +40,7 @@ const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
         <>
           <div className='relative mt-4'>
             <Link href={`/category/${encodeURIComponent(recipe.category!.name)}`} className='absolute left-3 top-3 rounded-full px-3 py-1 text-base md:text-lg font-medium text-accent-three/90'>{recipe.category!.name}</Link>
-            {recipe.images && <RecipeImageGrid  images={recipe.images} recipeTitle={recipe.title}/>}
+            {recipe.images && <RecipeImageGrid images={recipe.images} recipeTitle={recipe.title} />}
           </div>
           <h1 className='mt-6 text-2xl md:text-3xl'>{recipe.title}</h1>
           <div className='mt-4 flex items-center gap-2'>
@@ -61,6 +62,7 @@ const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 <li key={i} className='text-text-primary/85'>{step}</li>
               ))}
             </ol>
+            <MoreFromAuthor authorId={recipe.author.id} userName={recipe.author.username} currentRecipeId={recipe.id} />
             {isAuthor &&
               <div className='flex gap-2 mx-auto'>
                 <DeleteButton id={recipe.id} />
