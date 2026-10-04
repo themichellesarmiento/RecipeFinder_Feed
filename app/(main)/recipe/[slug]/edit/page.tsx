@@ -17,14 +17,15 @@ const EditRecipe = async ({ params }: { params: Promise<{ slug: string }> }) => 
   return (
     <div className="mx-auto max-w-2xl p-6 md:p-10">
       {recipe &&
-        <EditRecipeForm recipeId={recipe.id}
+        <EditRecipeForm 
+          recipeId={recipe.id}
           defaultValues={{
             title: recipe.title,
             category: recipe.category.id,
             ingredients: recipe.ingredients,
             instructions: recipe.instructions,
           }}
-          currentImagePath={recipe.images?.[0].image_path || null}
+          currentImages={recipe.images ?? []}
         />
       }
     </div>

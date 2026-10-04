@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 
-const CreatePage = () => {
+const CreateRecipePage = () => {
   const supabase = createClient()
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -25,10 +25,10 @@ const CreatePage = () => {
     },
   });
 
-  const postImageSchema = recipeSchema.omit({ image: true }).extend({ image: z.unknown().transform(value => { return value as FileList }).optional() })
+  const postImagesSchema = recipeSchema.omit({ images: true }).extend({ images: z.custom<FileList>().optional().refine(files => !files || files.length <= 4, 'Up to 4 images') })
 
   const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(postImageSchema)
+    resolver: zodResolver(postImagesSchema)
   })
 
   const { mutate, error: serverSideError, isPending } = useMutation({
@@ -50,14 +50,12 @@ const CreatePage = () => {
       </h1>
 
       <form onSubmit={handleSubmit(values => {
-        const imageForm = new FormData()
-        if (values.image) imageForm.append('image', values.image[0])
         mutate({
           title: values.title,
           ingredients: values.ingredients,
           instructions: values.instructions,
           category: values.category,
-          image: imageForm
+          images: values.images ? Array.from(values.images) : undefined
         })
 
       })} className='mt-8 flex flex-col gap-5'>
@@ -99,9 +97,9 @@ const CreatePage = () => {
         </div>
 
         <div className='flex flex-col gap-1'>
-          <label htmlFor='image' className='text-sm font-medium uppercase'>Image (optional)</label>
-          <input type="file" {...register('image')} className='border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-one' />
-          {errors.image && <ErrorMessage error={errors.image.message!} />}
+          <label htmlFor='image' className='text-sm font-medium uppercase'>Images (optional ,add up to 4)</label>
+          <input type="file" multiple {...register('images')} className='border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-one' />
+          {errors.images && <ErrorMessage error={errors.images.message!} />}
         </div>
 
         <button
@@ -112,4 +110,4 @@ const CreatePage = () => {
     </div>
   );
 }
-export default CreatePage;
+export default CreateRecipePage;

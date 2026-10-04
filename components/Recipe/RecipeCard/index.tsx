@@ -4,7 +4,6 @@ import Link from "next/link"
 const RecipeCard = ({ recipe }: { recipe: RecipePropsType }) => {
   return (
     <div className='relative flex flex-col overflow-hidden rounded-2xl border border-text-primary/10 transition-all duration-200 hover:-translate-y-1 hover:border-text-primary/25'>
-      <Link href={`/recipe/${recipe.slug}`} className='absolute inset-0 z-0' />
       <div className="relative aspect-square overflow-hidden">
         <Link href={`/category/${encodeURIComponent(recipe.category.name)}`} className='relative z-10 inline-block rounded-full px-3 py-1 text-base md:text-lg font-medium text-accent-three/90'>{recipe.category.name}</Link>
         {recipe.images[0] &&
@@ -19,6 +18,7 @@ const RecipeCard = ({ recipe }: { recipe: RecipePropsType }) => {
           <span className="text-base md:text-lg text-text-primary/70">{recipe.author.username}</span>
         </div>
       </div>
+      <Link href={`/recipe/${recipe.slug}`} className='absolute inset-0 z-0' />
     </div>
   )
 }

@@ -7,16 +7,8 @@ import uploadImage from "@/lib/supabase/upload-image"
 
 const CreateRecipe = async (postData: RecipeFormValues) => {
   const supabase = await createClient()
-  const { image, ...parsedData } = recipeSchema.parse(postData)
+  const { images, ...parsedData } = recipeSchema.parse(postData)
   const slug = slugify(parsedData.title)
-
-  const imageFile = postData.image?.get('image')
-
-  if (!(imageFile instanceof File) && imageFile !== null && imageFile !== 'undefined') {
-    throw Error('Image is not a valid format')
-  }
-
-  const imageUrl = imageFile && imageFile !== 'undefined' ? await uploadImage(imageFile) : null
 
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -35,12 +27,15 @@ const CreateRecipe = async (postData: RecipeFormValues) => {
 
   if (error) throw error
 
-  if (imageUrl) {
-    const { error: imageError } = await supabase.from('recipe_images').insert({
-      recipe_id: data.id,
-      image_path: imageUrl,
-      position: 1
-    })
+  if (images && images.length > 0) {
+    const imageURLs = await Promise.all(images.map(i => uploadImage(i)))
+    const { error: imageError } = await supabase.from('recipe_images')
+      .insert(
+        imageURLs.map((path, i) => ({
+          recipe_id: data.id,
+          image_path: path,
+          position: i + 1
+        })))
 
     if (imageError) throw imageError;
   }

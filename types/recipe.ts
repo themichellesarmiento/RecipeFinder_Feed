@@ -13,3 +13,8 @@ export interface RecipePropsType {
     name: string;
   };
 }
+
+export interface RecipeImage {
+  id: string,
+  image_path: string
+}

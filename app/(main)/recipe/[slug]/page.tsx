@@ -2,6 +2,7 @@ import { getSingleRecipe } from '@/lib/supabase/queries';
 import { createClient } from '@/lib/supabase/serverClient';
 import Link from 'next/link';
 import DeleteButton from '../deleteButton';
+import RecipeImageGrid from '@/components/UI/ImageGrid';
 
 const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const supabase = await createClient()
@@ -36,10 +37,9 @@ const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
       {recipe && (
         <>
-          <div className='relative mt-4 aspect-video overflow-hidden rounded-2xl'>
+          <div className='relative mt-4'>
             <Link href={`/category/${encodeURIComponent(recipe.category!.name)}`} className='absolute left-3 top-3 rounded-full px-3 py-1 text-base md:text-lg font-medium text-accent-three/90'>{recipe.category!.name}</Link>
-            {recipe.images[0] &&
-              <img src={recipe.images[0].image_path} alt={recipe.title} className="h-full w-full object-cover" />}
+            {recipe.images && <RecipeImageGrid  images={recipe.images} recipeTitle={recipe.title}/>}
           </div>
           <h1 className='mt-6 text-2xl md:text-3xl'>{recipe.title}</h1>
           <div className='mt-4 flex items-center gap-2'>

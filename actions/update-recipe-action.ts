@@ -3,16 +3,10 @@
 import uploadImage from "@/lib/supabase/upload-image"
 import { RecipeFormValues, recipeSchema } from "./schemas"
 import { createClient } from "@/lib/supabase/serverClient"
-import { revalidatePath } from "next/cache"
 
 const UpdateRecipe = async (recipeId: string, postData: RecipeFormValues) => {
   const supabase = await createClient()
-  const { image, ...parsedData } = recipeSchema.parse(postData)
-
-  const imageFile = postData.image?.get('image')
-  if (imageFile && !(imageFile instanceof File)) {
-    throw new Error('Image is not a valid file')
-  }
+  const { images, ...parsedData } = recipeSchema.parse(postData)
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized access')
@@ -27,30 +21,26 @@ const UpdateRecipe = async (recipeId: string, postData: RecipeFormValues) => {
 
   if (error) throw error
 
-  if (imageFile instanceof File) {
-    const imageUrl = await uploadImage(imageFile)
-
+  if (images && images.length > 0) {
     const { data: existingImage } = await supabase
       .from('recipe_images')
-      .select('id')
+      .select('position')
       .eq('recipe_id', recipeId)
-      .eq('position', 1)
+      .order('position', { ascending: false })
+      .limit(1)
       .maybeSingle()
 
-    if (existingImage) {
-      const { error: imageError } = await supabase
-        .from('recipe_images')
-        .update({ image_path: imageUrl })
-        .eq('id', existingImage.id)
+    const startPosition = (existingImage?.position ?? 0) + 1
+    const imageURLs = await Promise.all(images.map(i => uploadImage(i)))
+    const { error: imageError } = await supabase.from('recipe_images')
+      .insert(
+        imageURLs.map((path, i) => ({
+          recipe_id: recipeId,
+          image_path: path,
+          position: startPosition + i
+        })))
 
-      if (imageError) throw imageError
-    } else {
-      const { error: imageError } = await supabase
-        .from('recipe_images')
-        .insert({ recipe_id: recipeId, image_path: imageUrl, position: 1 })
-
-      if (imageError) throw imageError
-    }
+    if (imageError) throw imageError
   }
 
   return data
