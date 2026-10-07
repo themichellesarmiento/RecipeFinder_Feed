@@ -43,7 +43,7 @@ export const getCategories = async (supabase: ReturnType<typeof createClient>) =
 export const getMoreFromAuthor = async (authorId: string, currentRecipeId: string, supabase: ReturnType<typeof createClient>) => {
   return await supabase
     .from('recipes')
-    .select(`id,title,slug,author:users(id, username),category:categories(id, name),images:recipe_images(image_path,position)`)
+    .select(`id, title, slug, author:users(id, username), category:categories(id, name), images:recipe_images(image_path,position)`)
     .eq('author', authorId)
     .neq('id', currentRecipeId)
     .eq('images.position', 1)
@@ -51,7 +51,17 @@ export const getMoreFromAuthor = async (authorId: string, currentRecipeId: strin
     .limit(3)
 }
 
+export const getComments = async (recipeId: string, supabase: ReturnType<typeof createClient>) => {
+  return await supabase
+    .from('comments')
+    .select(`id, content, created_at, parent_comment_id, author:users(id,username)`)
+    .eq('recipe_id', recipeId)
+    .order('created_at', { ascending: true })
+
+}
+
 export type AllRecipesType = QueryData<ReturnType<typeof getAllRecipes>>
 export type SingleRecipeType = QueryData<ReturnType<typeof getSingleRecipe>>
 export type SearchResultType = QueryData<ReturnType<typeof searchRecipe>>
 export type RecipesByCategory = QueryData<ReturnType<typeof getRecipesByCategory>>
+export type RecipeCommentsType = QueryData<ReturnType<typeof getComments>>
