@@ -25,5 +25,6 @@ export interface CommentItemProps extends CommentSectionProps {
   comment: CommentArray,
   onReply: (content: string, parentId: string) => void,
   onDelete: (id: string) => void,
-  isMutating: boolean
+  isMutating: boolean,
+  indent?: number
 }

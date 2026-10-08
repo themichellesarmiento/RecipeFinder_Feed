@@ -4,6 +4,7 @@ import Link from 'next/link';
 import DeleteButton from '../deleteButton';
 import RecipeImageGrid from '@/components/UI/ImageGrid';
 import MoreFromAuthor from '@/components/Recipe/MoreFromAuthor';
+import CommentSection from '@/components/Comments';
 
 const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const supabase = await createClient()
@@ -63,6 +64,7 @@ const Recipe = async ({ params }: { params: Promise<{ slug: string }> }) => {
               ))}
             </ol>
             <MoreFromAuthor authorId={recipe.author.id} userName={recipe.author.username} currentRecipeId={recipe.id} />
+            <CommentSection recipeId={recipe.id} recipeAuthorId={recipe.author.id} userId={user?.id ?? null} />
             {isAuthor &&
               <div className='flex gap-2 mx-auto'>
                 <DeleteButton id={recipe.id} />

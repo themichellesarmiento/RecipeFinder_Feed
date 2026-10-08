@@ -1,16 +1,15 @@
 'use server'
 import { createClient } from "@/lib/supabase/serverClient"
-import { CommentFormValues, commentSchema } from "./schemas"
 
 interface CreateCommentInput {
   recipeId: string,
-  contentData: CommentFormValues
+  contentData: string,
   parentCommentId?: string | null
 }
 
 const CreateComment = async ({ recipeId, contentData, parentCommentId }: CreateCommentInput) => {
   const supabase = await createClient()
-  const parseContent = commentSchema.parse(contentData)
+  
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unathorized access')
@@ -21,7 +20,7 @@ const CreateComment = async ({ recipeId, contentData, parentCommentId }: CreateC
       recipe_id: recipeId,
       author: user.id,
       parent_comment_id: parentCommentId ?? null,
-      ...parseContent
+      content:contentData
     })
     .select('id, content, created_at, parent_comment_id, author:users(id, username)')
     .single()
