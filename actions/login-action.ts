@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/serverClient"
 import { logInSchema } from "./schemas"
-import { success, z } from 'zod'
+import { z } from 'zod'
 
 export const LogIn = async (userdata: z.infer<typeof logInSchema>) => {
   const supabase = await createClient()

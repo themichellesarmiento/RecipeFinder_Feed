@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RecipeFinder
 
-## Getting Started
+A recipe-sharing web app where users can post recipes with photos, browse by category, search, and discuss in threaded comments.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Authentication**
+- Sign up, log in and log out, powered by Supabase Auth
+- Create and edit pages are only accessible to logged-in users, and edit is limited to the recipe's author
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Recipes**
+- Anyone can browse and read recipes
+- Logged-in users can create, edit and delete their own recipes
+- Search recipes by title
+- Browse recipes by category through a dynamic route *_(/category/[name])_*
+- "More from this author" section on each recipe page
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Images**
+- Upload up to 4 photos per recipe, stored in a Supabase Storage bucket
+- Add more photos or remove existing ones when editing
+- Responsive photo grid on the recipe page that adapts to the number of photos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Comments**
+- Anyone can read comments, logged-in users can post them
+- Nested replies
+- Comment authors can delete their own comments, and recipe authors can delete any comment on their recipes
 
-## Learn More
+**UX**
+- Loading and error states 
+- Toast notifications for success and failure
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js** (App Router) with **TypeScript**
+- **Supabase**: Auth, PostgreSQL, Storage and Row Level Security
+- **TanStack Query** for data fetching, caching and revalidation
+- **React Hook Form** + **Zod** for form validation
+- **Tailwind CSS** for styling
+- **Sonner** for toast notifications
 
-## Deploy on Vercel
+## Database
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Table | Purpose |
+|---|---|
+| **users** | Public profile (username, email), linked to Supabase Auth |
+| **categories** | Recipe categories |
+| **recipes** | Recipes, each belonging to one user and one category |
+| **recipe_images** | Photos for a recipe (one-to-many), with a *_position_* for ordering |
+| **comments** | Comments on recipes, with a self-referencing *_parent_comment_id_* for nested replies |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

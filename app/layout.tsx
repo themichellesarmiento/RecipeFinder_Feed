@@ -14,7 +14,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "Recipe Finder",
-  description: "Find the best recipe",
+  description: "Easy, delicious recipes",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
