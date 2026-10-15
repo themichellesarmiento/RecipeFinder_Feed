@@ -39,6 +39,16 @@ A recipe-sharing web app where users can post recipes with photos, browse by cat
 - **Tailwind CSS** for styling
 - **Sonner** for toast notifications
 
+## Design Patterns
+ 
+| Pattern | Where it's used |
+|---|---|
+| **Composite** | Nested comments. A CommentNode contains child CommentNode's, and CommentItem renders itself recursively, so a single comment and a whole thread are handled the same way |
+| **Singleton** | **getQueryClient()** keeps one shared QueryClient per browser tab (a fresh one per request on the server so users' data never mixes) |
+| **Facade** | Server Actions like CreateRecipe hide several steps (validation, recipe insert, image upload, image rows) behind a single call |
+| **Observer** | TanStack Query. After a mutation, **invalidateQueries** notifies every component subscribed to that query key, which refetches and updates |
+
+
 ## Database
 
 | Table | Purpose |
