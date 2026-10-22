@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/browserClient";
 
 const RecipeHomeGrid = ({ recipes }: { recipes: AllRecipesType }) => {
   const supabase = createClient()
-  const { data: recipesData , isError ,error } = useQuery({
+  const { data: recipesData, isError, error } = useQuery({
     queryKey: ['home-recipes'],
     queryFn: async () => {
       const { data, error } = await getAllRecipes(supabase)
@@ -34,7 +34,7 @@ const RecipeHomeGrid = ({ recipes }: { recipes: AllRecipesType }) => {
   }
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 px-4  py-4 md:py-8 mx-auto max-w-6xl'>
       {recipesData.map((p, index) => (
         <RecipeCard recipe={p} key={index} />
       ))}

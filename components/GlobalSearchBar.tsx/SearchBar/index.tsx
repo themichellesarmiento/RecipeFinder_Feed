@@ -20,7 +20,7 @@ const SearchBar = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}className='my-4 w-full max-w-2xl mx-auto px-4'>
+      <form onSubmit={handleSubmit} className='my-4 max-w-2xl mx-auto px-4 pt-6'>
         <div className='relative'>
           <input
             value={input}

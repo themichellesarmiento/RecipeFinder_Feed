@@ -3,6 +3,7 @@ import { searchRecipe, SearchResultType } from "@/lib/supabase/queries"
 import { useQuery } from "@tanstack/react-query"
 import RecipeCard from "../Recipe/RecipeCard"
 import { createClient } from "@/lib/supabase/browserClient"
+import Link from "next/link"
 
 interface SearchResultsProps {
   query: string,
@@ -32,8 +33,9 @@ const SearchResults = ({ query, initialData }: SearchResultsProps) => {
 
   if (!results || results.length === 0) {
     return (
-      <p className='mt-4 text-text-primary/70'>
+      <p className='mt-4 text-text-primary/70 flex flex-col gap-2 text-center text-lg'>
         {query ? `No recipes found matching '${query}'.` : 'Type something in the search bar to get started'}
+        <Link href='/' className='underline font-medium'>Go back to home</Link>
       </p>
     )
   }
