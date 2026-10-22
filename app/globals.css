@@ -6,6 +6,7 @@
   --accent-one: #7B68EE;
   --accent-two: #E23636;
   --accent-three: #F78F3F;
+  --light-bg: #EDE7E3;
 }
 
 @theme inline {
@@ -14,6 +15,7 @@
   --color-accent-one: var(--accent-one);
   --color-accent-two: var(--accent-two);
   --color-accent-three: var(--accent-three);
+  --color-light-bg:var(--light-bg);
   --font-sans: var(--font-outfit);
   --font-mono: var(--font-outfit);
 }
